@@ -1,0 +1,4 @@
+[flake8]
+ignore = E501,W503,E231,E402, E203, W605, E704
+max-line-length = 119
+exclude = .cache/*

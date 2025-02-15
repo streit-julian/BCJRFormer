@@ -1,0 +1,19 @@
+code_type: LDPC
+code_n: 64
+code_k: 32
+code_q: 4
+standardize: True
+inner_code_config: MarkerCodeConfig
+custom_file_name: "LDPC_N64_K32_QC_NB_FIXED_WEIGHTS.alist"
+file_extension: ".alist"
+
+MarkerCodeConfig:
+  marker: [3, 2]
+  N_c: 6
+  p: 2 # corresponds to q = 4
+
+ConvolutionalCodeConfig:
+  k: 1
+  g: [5, 7, 10, 14] # corresponds to 0101, 0111, 1010, 1110
+  p: 2
+  random_offset: False

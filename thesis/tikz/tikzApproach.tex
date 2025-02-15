@@ -1,0 +1,63 @@
+\documentclass[tikz=true]{standalone}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{relsize}
+
+\definecolor{lightGreen}{rgb}{.56, .93, .56}
+\definecolor{lightPink}{rgb}{1, .71, .76}
+\definecolor{cornflowerBlue}{RGB}{100, 149, 237}
+\definecolor{navajoWhite}{rgb}{1, 0.87, 0.68}
+
+\tikzset{fontscale/.style = {font=\relsize{#1}}
+    }
+
+
+\usetikzlibrary {arrows, calc,positioning,shapes.misc, graphs, matrix, fit, quotes, backgrounds}
+
+\tikzstyle{terminal} = [draw=black, line width=.5pt, rectangle, rounded corners = 2pt, minimum height = 10pt, fontscale=-1]
+   
+\tikzstyle{embeddingNode} = [
+ line width=.5pt, minimum height = 10pt, minimum width=20pt, inner xsep=5pt, append after command={
+   \pgfextra
+        \draw[sharp corners]%, fill=]% 
+    (\tikzlastnode.west)% 
+    [rounded corners=0pt] |- (\tikzlastnode.north)% 
+    [rounded corners=0pt] -| (\tikzlastnode.east)% 
+    [rounded corners=2pt] |- (\tikzlastnode.south)% 
+    [rounded corners=0pt] -| (\tikzlastnode.west);
+   \endpgfextra
+   }
+]
+
+\begin{document}
+\begin{tikzpicture}[scale=1]        
+
+    \node (m)  at (0, 0) { $m$} ; 
+    \node (linear) [terminal,right = 10pt of m.east, fontscale=-1] {Linear Code};
+    \node (marker) [terminal, right= 15pt of linear.east ] {Marker Code};
+    \node (channel) [terminal, below = 8pt of marker.south] {IDS Channel};
+    \node (bcjrformer) [terminal, below = 8pt of channel] {BCJRFormer};
+    \node (ecct) [terminal] at (bcjrformer -| linear) {ECCT};
+
+    \node (dec) at (ecct -| m) {$\hat{x}$};
+
+    \path (m) edge[->] (linear);
+
+    \path (linear) edge[->] node[above=3pt, fontscale=-1] { $y_{\text{out}}$ } (marker);
+
+    \path (marker) edge[->] (channel);
+
+    \path (channel) edge[->] (bcjrformer);
+
+    \path(bcjrformer) edge[->] (ecct);
+
+    \path(ecct) edge [->] (dec);
+
+    
+
+    
+
+\end{tikzpicture}
+
+\end{document}

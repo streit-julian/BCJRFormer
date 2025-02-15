@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "bcjrformer"
+version = "0.1.0"
+description = "Codebase for my master thesis on Transformer-Based Decoding in Concatenated Coding Schemes Under Synchronization Errors"
+authors = ["Julian Streit <julian.streit@tum.de>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+torch = "^2.4.0+cu118"
+wandb = ">=0.17.5"
+spock-config = "^3.1.0"
+numpy = "^2.0"
+numba = "^0.61.0"
+galois = "^0.4.2"
+matplotlib = "^3.9.2"
+typer = "^0.13.0"
+tqdm = "^4.67.1"
+python-dotenv = "^1.0.1"
+einops = "^0.8.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+ipykernel = "^6.29.5"
+pyinstrument = "^4.7.3"
+flake8 = "^7.1.1"
+black = "^24.10.0"
+
+[tool.poetry.group.extra.dependencies]
+tikzplotlib = "^0.10.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[[tool.poetry.source]]
+name = "torch-stable"
+url = "https://download.pytorch.org/whl/"
+priority = "supplemental"

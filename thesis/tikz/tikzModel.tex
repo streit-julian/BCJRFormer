@@ -1,0 +1,376 @@
+\documentclass[tikz]{standalone}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{relsize}
+\usepackage{bm}
+
+
+\tikzset{fontscale/.style = {font=\relsize{#1}}
+    }
+
+
+\usetikzlibrary {arrows, calc,positioning,shapes.misc, graphs, matrix, fit, quotes, backgrounds}
+\definecolor{dgreen}{RGB}{1,50,32}
+\definecolor{lightGreen}{rgb}{0, 1, .5}
+\definecolor{lightPink}{rgb}{1, .71, .76}
+\definecolor{cornflowerBlue}{RGB}{100, 149, 237}
+\definecolor{navajoWhite}{rgb}{1, 0.87, 0.68}
+\definecolor{midnightBlue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{purple}{rgb}{.63, .13, .94}
+\definecolor{darkSeaGreen}{rgb}{.56, 0.74, 0.56}
+
+
+\newcommand{\vv}{\ensuremath{\,\vert\,}}
+\newcommand{\cc}{\ensuremath{,\,}}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}}
+% Symbol declaration as macros
+
+\newcommand{\pdel}{\ensuremath{p_D}}
+\newcommand{\pins}{\ensuremath{p_I}}
+\newcommand{\psub}{\ensuremath{p_S}}
+\newcommand{\ptrans}{\ensuremath{p_T}}
+\newcommand{\sbin}{\ensuremath{\{ 0, 1\}}}
+\newcommand{\ibin}{\ensuremath{[ 0, 1]}}
+% \newcommand{\sset}[1]{\ensuremath{\{ #1 \}}}
+
+% generic codeword y 
+
+\newcommand{\ygen}{\ensuremath{\bm{x}}}
+\newcommand{\ygenIx}{\ensuremath{x}}
+
+
+% inner encoded y 
+\newcommand{\yin}{\ensuremath{\bm{x}^{\text{in}}}}
+% outer encoded y 
+\newcommand{\yout}{\ensuremath{\bm{x}^{\text{out}}}}
+
+% inner encoded y _ ix => scalar
+\newcommand{\yinIx}{\ensuremath{x^{\text{in}}}}
+
+
+% outer encoded y _ix => scalar
+\newcommand{\youtIx}{\ensuremath{x^{\text{out}}}}
+
+
+\newcommand{\Yval}{\ensuremath{\xi}}
+% message m 
+\newcommand{\mess}{\ensuremath{\bm{m}}}
+
+% mess Prediction
+\newcommand{\messPred}{\ensuremath{\bm{\hat{m}}}}
+
+% length fo a generic codeword
+\newcommand{\ngen}{\ensuremath{n}}
+% length of inner encoded y 
+\newcommand{\nin}{\ensuremath{n_{\text{in}}}}
+
+% length of outer encoded y 
+\newcommand{\nout}{\ensuremath{n_{\text{out}}}}
+
+
+% prediction of outer encoded y
+\newcommand{\predyout}{\ensuremath{\bm{\hat{x}}^{\text{out}}}}
+\newcommand{\predyin}{\ensuremath{\bm{\hat{x}}^{\text{in}}}}
+
+% received sequence
+\newcommand{\rec}{\ensuremath{\bm{r}}}
+
+\newcommand{\recIx}{\ensuremath{r}}
+
+% received sequence of a bpsk channel
+\newcommand{\recbpsk}{\ensuremath{\bm{r}^{\text{BPSK}}}}
+
+% length of a sequence received via the bpsk channel
+\newcommand{\nrecbpsk}{\ensuremath{\nout}} 
+
+% length of received sequence
+\newcommand{\nrec}{\ensuremath{n_{\text{rec}}}}
+
+\newcommand{\dfrom}{\ensuremath{d}}
+\newcommand{\dto}{\ensuremath{d^{\prime}}}
+
+\newcommand{\llin}{\ensuremath{\text{Lin}}}
+
+\newcommand{\llr}{\ensuremath{\text{LLR}}}
+\newcommand{\bipolar}{\ensuremath{\phi}}
+\newcommand{\syndrome}{\ensuremath{\text{syn}}}
+\newcommand{\bin}{\ensuremath{\text{bin}}}
+
+\newcommand{\ybipolar}{\ensuremath{\bm{x}^{\bipolar}}}
+
+
+\newcommand{\ymodel}{\ensuremath{\bm{\hat{x}}}}
+\newcommand{\ymodelIx}{\ensuremath{\hat{x}}}
+
+% \newcommand{\gftwo}{\ensuremath{\mathbb{F}_2}}
+
+\newcommand{\marker}{\ensuremath{\bm{s_m}}}
+\newcommand{\markerFreq}{\ensuremath{N_m}}
+
+
+\newcommand{\gen}{\ensuremath{\bm{G}}}
+\newcommand{\pc}{\ensuremath{\bm{H}}}
+\newcommand{\attQuery}{\ensuremath{\bm{Q}}}
+\newcommand{\attKey}{\ensuremath{\bm{K}}}
+\newcommand{\attValue}{\ensuremath{\bm{V}}}
+
+\newcommand{\alphabetSize}{\ensuremath{q}}
+
+\newcommand{\bcjrformerInput}{\ensuremath{\bm{Y}}}
+\newcommand{\bcjrformerInputIx}{\ensuremath{Y}}
+
+\newcommand{\bcjrformerInputBit}{\ensuremath{\bm{Y^{\text{symb}}}}}
+\newcommand{\bcjrformerInputBitIx}{\ensuremath{Y^{\text{symb}}}}
+
+\newcommand{\bcjrformerInputState}{\ensuremath{\bm{Y^{\text{state}}}}}
+\newcommand{\bcjrformerInputStateIx}{\ensuremath{Y^{\text{state}}}}
+
+\newcommand{\alphabet}{\ensuremath{\mathbb{F}_q}}
+
+\newcommand{\nstates}{\ensuremath{n_s}}
+
+\newcommand{\offset}{\ensuremath{\bm{o}}}
+\newcommand{\offsetIx}{\ensuremath{o}}
+
+
+
+% --------------- Tikz Definitions
+\usetikzlibrary {decorations.pathreplacing, arrows, calc,positioning,shapes.misc, graphs, matrix, quotes,backgrounds, fit, intersections, }
+% \tikzset{terminal/.style={
+%                           % The shape:
+%                           rectangle,minimum size=6mm,rounded corners=3mm,
+%                           % The rest
+%                           very thick,draw=black!40,
+%                           top color=white,bottom color=gray!30,
+%                           }}
+
+\tikzstyle{terminal} = [draw=black, line width=.5pt, rectangle, rounded corners = 2pt, minimum height = 10pt, fontscale=-1, top color=white, bottom color=gray!20]
+   
+\tikzstyle{container} = [draw=black!40, rectangle, very thick, inner sep=0.1cm,  rounded corners=.5mm, top color=white, bottom color=gray!30]
+
+\tikzstyle{vector} = [draw=black, rectangle, rounded corners=2pt, minimum width=50pt, minimum height=10pt]
+\tikzset{
+fontscale/.style = {font=\relsize{#1}}
+}
+
+\tikzstyle{receivedNode} = [draw=black, line width=.5pt, rectangle, rounded corners = 2pt, minimum height = 10pt]
+   
+\tikzstyle{embeddingNode} = [
+ line width=.5pt, minimum height = 14pt, minimum width=20pt, inner sep=1pt, append after command={
+   \pgfextra
+        \draw[sharp corners]%, fill=]% 
+    (\tikzlastnode.west)% 
+    [rounded corners=0pt] |- (\tikzlastnode.north)% 
+    [rounded corners=0pt] -| (\tikzlastnode.east)% 
+    [rounded corners=2pt] |- (\tikzlastnode.south)% 
+    [rounded corners=0pt] -| (\tikzlastnode.west);
+   \endpgfextra
+   }
+]
+\tikzstyle{vnode}=[circle, draw, very thick, minimum size=5pt, top color=white, bottom color=gray!20]
+\tikzstyle{cnode}=[rectangle,minimum size=6mm,rounded corners=1mm,
+                          % The rest
+                          very thick,draw=black, top color=gray!20, bottom color=gray!60]
+
+\tikzstyle{posEmbeddingNode} = [line width=.5pt, minimum height = 3pt, minimum width=23.5pt, inner sep=0pt, append after command={
+   \pgfextra
+        \draw[sharp corners, fill=darkSeaGreen!80]% 
+    (\tikzlastnode.west)% 
+    [rounded corners=2pt] |- (\tikzlastnode.north)% 
+    [rounded corners=2pt] -| (\tikzlastnode.south east)% 
+    [rounded corners=0pt] |- (\tikzlastnode.south)% 
+    [rounded corners=0pt] -| (\tikzlastnode.west);
+   \endpgfextra
+   }]
+
+\tikzstyle{seqEmbeddingNode} = [line width=.5pt, rectangle, rounded corners = 1pt, minimum height = 14pt, minimum width=3pt, inner sep=0pt, append after command={
+   \pgfextra
+        \draw[sharp corners, fill=cornflowerBlue!80 ]%fill=cornflowerBlue]% 
+    (\tikzlastnode.west)% 
+    [rounded corners=0pt] |- (\tikzlastnode.north)% 
+    [rounded corners=0pt] -| (\tikzlastnode.east)% 
+    [rounded corners=0pt] |- (\tikzlastnode.south)% 
+    [rounded corners=2pt] -| (\tikzlastnode.west);
+   \endpgfextra
+   }
+]
+\tikzstyle{layerNode} = [draw=black, line width=.5pt, rectangle, rounded corners = 2pt, minimum height = 10pt]
+
+\tikzstyle{symbolReprNode} = [draw=black, rectangle, minimum height=12pt, minimum width=4pt, inner sep=0]
+
+\tikzstyle{stateReprNode} = [draw=black, rectangle, minimum height=12pt, minimum width=8pt, inner sep=0]
+
+\tikzstyle{outputReprNode} = [draw=black, rectangle, minimum height=4pt, minimum width=4pt, inner sep=0]
+
+% \tikzstyle{addNode} = [draw=black, circle, inner sep=0]
+
+\tikzstyle{addNode} = [
+    circle,
+    draw=black,
+    inner sep=0,
+    minimum size=7pt,
+    path picture={
+      \draw [black]
+            (path picture bounding box.90) -- (path picture bounding box.270)
+            (path picture bounding box.0) -- (path picture bounding box.180);
+    }
+]
+
+
+\begin{document}
+\begin{tikzpicture}[scale=1]        
+    \node (r1)[receivedNode, minimum width=22pt] at (0,0) {$\rec^1$};
+
+    % Not sure if this is good
+    % With channel
+    \node (channel) [receivedNode, fill=gray!40, left = .5cm of r1] {\footnotesize IDS Channel};
+    \node (channelToReceived) [coordinate, left=1pt of r1.west] {};
+    \path (channel.east) edge[-latex] (channelToReceived);
+    \node (codeword) [left = .3cm of channel.west] {$\yin$};
+    \path (codeword.east) edge[-latex] (channel.west);
+
+
+    % If no channel (Still use channel for alignment of Linear  + Positional embedding:
+    % \node (channel) [coordinate, left = 1.5cm of r1] {};
+
+    \node (r2)[receivedNode, minimum width=33pt, right = 4pt of r1.east] {$\rec^2$};
+    \node (r3)[receivedNode, minimum width=25pt, right = 4pt of r2.east] {$\rec^3$};
+    \node (r4)[receivedNode, minimum width=33pt, right = 4pt of r3.east] {$\rec^4$};
+    \node (r5)[receivedNode, minimum width=22pt, right = 4pt of r4.east] {$\rec^5$};
+
+    \node(window) [receivedNode, minimum width=156pt, above= .4cm of r3.north, fill=navajoWhite] {Sliding Drift Window};
+
+    % \node(linearEmbedding) [above left=0cm and .5cm of window.north west ,align=center, fontscale=1] {\footnotesize Linear \\[-1ex] \footnotesize Embedding};
+    \node(linearEmbedding) [above = (.5cm) of channel, align=center, fontscale=1, xshift=-5pt] {\footnotesize Linear \\[-1ex] \footnotesize Embedding};
+
+    % combination of node pos embedding, node y^i and sequence embedding
+    \node(y1SeqEmbedding)[seqEmbeddingNode, above=.4cm of window.north west, xshift=6pt] {};
+    \node (y1)[embeddingNode, right = 0pt of y1SeqEmbedding.east] {$\bcjrformerInput^1$};
+    \node (y1PosEmbedding)[posEmbeddingNode, above=0pt of y1.north, xshift=-1.75pt] {};
+
+    % \node(Embeddings) [above left=0cm and -0cm of y1SeqEmbedding.west ,align=center, fontscale=1] {\footnotesize \textcolor{lightGreen}{\textbf{Positional}} and \textcolor{cornflowerBlue}{\textbf{Sequence}}\\[-1ex]\footnotesize Embedding};
+    \node(Embeddings) [above=0pt of linearEmbedding,align=center, fontscale=1] {\footnotesize \textcolor{darkSeaGreen!80}{\textbf{Positional}} \& \textcolor{cornflowerBlue!80}{\textbf{Sequence}}\\[-1ex]\footnotesize Embedding};
+
+    \node(y2SeqEmbedding)[seqEmbeddingNode, right=7pt of y1.east] {};
+    \node (y2)[embeddingNode, right = 0pt of y2SeqEmbedding.east] {$\bcjrformerInput^2$};
+    \node (y2PosEmbedding)[posEmbeddingNode, above=0pt of y2.north, xshift=-1.75pt] {};
+
+    \node(y3SeqEmbedding)[seqEmbeddingNode, right=7pt of y2.east] {};
+    \node (y3)[embeddingNode, minimum width=20pt, right=0pt of y3SeqEmbedding.east] {$\bcjrformerInput^3$};
+    \node (y3PosEmbedding)[posEmbeddingNode, above=0pt of y3.north, xshift=-1.75pt] {};
+
+    \node(y4SeqEmbedding)[seqEmbeddingNode, right=7pt of y3.east] {};
+    \node (y4)[embeddingNode, right=0pt of y4SeqEmbedding.east] {$\bcjrformerInput^4$};
+    \node (y4PosEmbedding)[posEmbeddingNode, above=0pt of y4.north, xshift=-1.75pt] {};
+
+    \node(y5SeqEmbedding)[seqEmbeddingNode, right=7pt of y4.east] {};
+    \node (y5)[embeddingNode, right=0pt of y5SeqEmbedding.east] {$\bcjrformerInput^5$};
+    \node (y5PosEmbedding)[posEmbeddingNode, above=0pt of y5.north, xshift=-1.75pt] {};
+
+
+
+    \node(transformer) [receivedNode, minimum width=156pt, above= .4cm of y3PosEmbedding.north, fill=lightPink] {Transformer};
+
+
+    % if just output and no mean agg
+    % \node (output) [draw, circle, above=(.8cm + 10pt) of y3PosEmbedding.north, fontscale=1, inner sep=2pt] {$\hat{y}$}; 
+
+
+    % if mean agg then output
+    % \node (meanAgg) [draw, circle, above=.3cm of transformer.north, fontscale=-2, inner sep=0.5pt] {$\frac{1}{M}\!\!\sum$}; 
+
+    % meanAgg but left of transformer 
+    \node (meanAgg) [draw, circle, fontscale=-2, inner sep=0.5pt, fill=gray!10] at (channel |- transformer) {$\frac{1}{M}\!\!\sum$}; 
+
+
+    \node (output) at (codeword |- meanAgg) {$\predyin$};
+
+
+
+
+
+
+    
+    % RECEIVED TO WINDOW
+    \node (r1window)[coordinate, above=.4cm of r1.north] {};
+    \path (r1) edge[-latex] (r1window);
+
+    \node (r2window)[coordinate, above=.4cm of r2.north] {};
+    \path (r2) edge[-latex] (r2window);
+
+    \node (r3window)[coordinate, above=.4cm of r3.north] {};
+    \path (r3) edge[-latex] (r3window);
+
+    \node (r4window)[coordinate, above=.4cm of r4.north] {};
+    \path (r4) edge[-latex] (r4window); 
+    
+    \node (r5window)[coordinate, above=.4cm of r5.north] {};
+    \path (r5) edge[-latex] (r5window);
+
+
+    % WINDOW TO Y
+    \node (y1FromWindow)[coordinate, below=14.5pt of y1PosEmbedding.south] {};
+    \node (windowy1)[coordinate, below=(11.5pt) of y1FromWindow] {};
+    \path (windowy1) edge[-latex] node[circle, draw, minimum size=1pt, inner sep=0, fill, yshift=-1pt] (circ1) {} (y1FromWindow);
+
+    \node (y2FromWindow)[coordinate, below=14.5pt of y2PosEmbedding.south] {};
+    \node (windowy2)[coordinate, below=11.5pt  of y2FromWindow] {};
+    \path (windowy2) edge[-latex] node[circle, draw, minimum size=1pt, inner sep=0, fill, yshift=-1pt] {} (y2FromWindow);
+    
+    \node (y3FromWindow)[coordinate, below=14.5pt of y3PosEmbedding.south] {};
+    \node (windowy3)[coordinate, below=11.5pt  of y3FromWindow] {};
+    \path (windowy3) edge[-latex] node[circle, draw, minimum size=1pt, inner sep=0, fill, yshift=-1pt] {} (y3FromWindow);
+    
+    \node (y4FromWindow)[coordinate, below=14.5pt of y4PosEmbedding.south] {};
+    \node (windowy4)[coordinate, below=11.5pt  of y4FromWindow] {};
+    \path (windowy4) edge[-latex] node[circle, draw, minimum size=1pt, inner sep=0, fill, yshift=-1pt] {} (y4FromWindow);
+    
+    \node (y5FromWindow)[coordinate, below=14.5pt of y5PosEmbedding.south] {};
+    \node (windowy5)[coordinate, below=11.5pt  of y5FromWindow] {};
+    \path (windowy5) edge[-latex] node[circle, draw, minimum size=1pt, inner sep=0, fill, yshift=-1pt] {} (y5FromWindow);
+
+    % dashed line
+    \node(linearEmbeddingDashedLineFrom) [coordinate] at ([xshift=-10pt]circ1.west) {}; 
+    \node(linearEmbeddingDashedLine) [coordinate, right=145pt of linearEmbeddingDashedLineFrom] {};
+    \path (linearEmbeddingDashedLineFrom) edge[dashed] (linearEmbeddingDashedLine);
+
+    % arrow pointing to linear embedding
+
+    \node(linEmbToDashedLine) [coordinate] at ([xshift=-7pt]linearEmbeddingDashedLineFrom.west) {};
+    \path (linearEmbedding) edge[-latex] (linEmbToDashedLine);
+
+    % arrow pointing to pos embedding
+
+    \node(SeqEmbFromEmbeddings) [coordinate] at ([xshift=-7pt]y1SeqEmbedding.west) {};
+
+    \node(EmbeddingsToSeqEmb) [coordinate] at ([yshift=7pt]linearEmbedding.north east) {};
+
+    \path (EmbeddingsToSeqEmb) edge[-latex] (SeqEmbFromEmbeddings);
+    
+    % Y TO TRANSFORMER
+    \node (y1transformer)[coordinate, above=(.4cm) of y1PosEmbedding.north] {};
+    \path (y1PosEmbedding) edge[-latex] (y1transformer);
+    
+    \node (y2transformer)[coordinate, above=(.4cm) of y2PosEmbedding.north] {};
+    \path (y2PosEmbedding) edge[-latex] (y2transformer);
+    
+    \node (y3transformer)[coordinate, above=(.4cm) of y3PosEmbedding.north] {};
+    \path (y3PosEmbedding) edge[-latex] (y3transformer);
+    
+    \node (y4transformer)[coordinate, above=(.4cm) of y4PosEmbedding.north] {};
+    \path (y4PosEmbedding) edge[-latex] (y4transformer);
+    
+    \node (y5transformer)[coordinate, above=(.4cm) of y5PosEmbedding.north] {};
+    \path (y5PosEmbedding) edge[-latex] (y5transformer);
+
+
+    % Mean Agg left of transformer
+    \path (transformer) edge [-latex] (meanAgg); 
+
+
+    % meanAgg to Output
+    \path (meanAgg) edge[-latex] (output);
+
+\end{tikzpicture}
+\end{document}

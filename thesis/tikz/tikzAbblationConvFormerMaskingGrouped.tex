@@ -1,0 +1,241 @@
+\documentclass[tikz=true]{standalone}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{relsize}
+\usepackage{mathtools}
+\usepackage{bm}
+
+\definecolor{dgreen}{RGB}{1,50,32}
+\definecolor{lightGreen}{rgb}{0, 1, .5}
+\definecolor{lightPink}{rgb}{1, .71, .76}
+\definecolor{cornflowerBlue}{RGB}{100, 149, 237}
+\definecolor{navajoWhite}{rgb}{1, 0.87, 0.68}
+\definecolor{midnightBlue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{purple}{rgb}{.63, .13, .94}
+\definecolor{darkSeaGreen}{rgb}{.56, 0.74, 0.56}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\newcommand{\vv}{\ensuremath{\,\vert\,}}
+\newcommand{\cc}{\ensuremath{,\,}}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}}
+% Symbol declaration as macros
+
+\newcommand{\pdel}{\ensuremath{p_D}}
+\newcommand{\pins}{\ensuremath{p_I}}
+\newcommand{\psub}{\ensuremath{p_S}}
+\newcommand{\ptrans}{\ensuremath{p_T}}
+\newcommand{\sbin}{\ensuremath{\{ 0, 1\}}}
+\newcommand{\ibin}{\ensuremath{[ 0, 1]}}
+% \newcommand{\sset}[1]{\ensuremath{\{ #1 \}}}
+
+% generic codeword y 
+
+\newcommand{\ygen}{\ensuremath{\bm{x}}}
+\newcommand{\ygenIx}{\ensuremath{x}}
+
+
+% inner encoded y 
+\newcommand{\yin}{\ensuremath{\bm{x}^{\text{in}}}}
+% outer encoded y 
+\newcommand{\yout}{\ensuremath{\bm{x}^{\text{out}}}}
+
+% inner encoded y _ ix => scalar
+\newcommand{\yinIx}{\ensuremath{x^{\text{in}}}}
+
+
+% outer encoded y _ix => scalar
+\newcommand{\youtIx}{\ensuremath{x^{\text{out}}}}
+
+
+\newcommand{\Yval}{\ensuremath{\xi}}
+% message m 
+\newcommand{\mess}{\ensuremath{\bm{m}}}
+
+% mess Prediction
+\newcommand{\messPred}{\ensuremath{\bm{\hat{m}}}}
+
+% length fo a generic codeword
+\newcommand{\ngen}{\ensuremath{n}}
+% length of inner encoded y 
+\newcommand{\nin}{\ensuremath{n_{\text{in}}}}
+
+% length of outer encoded y 
+\newcommand{\nout}{\ensuremath{n_{\text{out}}}}
+
+
+% prediction of outer encoded y
+\newcommand{\predyout}{\ensuremath{\bm{\hat{x}}^{\text{out}}}}
+\newcommand{\predyin}{\ensuremath{\bm{\hat{x}}^{\text{in}}}}
+% received sequence
+\newcommand{\rec}{\ensuremath{\bm{r}}}
+
+\newcommand{\recIx}{\ensuremath{r}}
+
+% received sequence of a bpsk channel
+\newcommand{\recbpsk}{\ensuremath{\bm{r}^{\text{BPSK}}}}
+
+% length of a sequence received via the bpsk channel
+\newcommand{\nrecbpsk}{\ensuremath{\nout}} 
+
+% length of received sequence
+\newcommand{\nrec}{\ensuremath{n_{\text{rec}}}}
+
+\newcommand{\dfrom}{\ensuremath{d}}
+\newcommand{\dto}{\ensuremath{d^{\prime}}}
+
+\newcommand{\llin}{\ensuremath{\text{Lin}}}
+
+\newcommand{\llr}{\ensuremath{\text{LLR}}}
+\newcommand{\bipolar}{\ensuremath{\phi}}
+\newcommand{\syndrome}{\ensuremath{\text{syn}}}
+\newcommand{\bin}{\ensuremath{\text{bin}}}
+
+\newcommand{\ybipolar}{\ensuremath{\bm{x}^{\bipolar}}}
+
+
+\newcommand{\ymodel}{\ensuremath{\bm{\hat{x}}}}
+\newcommand{\ymodelIx}{\ensuremath{\hat{x}}}
+
+% \newcommand{\gftwo}{\ensuremath{\mathbb{F}_2}}
+
+\newcommand{\marker}{\ensuremath{\bm{s_m}}}
+\newcommand{\markerFreq}{\ensuremath{N_m}}
+
+
+\newcommand{\gen}{\ensuremath{\bm{G}}}
+\newcommand{\pc}{\ensuremath{\bm{H}}}
+\newcommand{\attQuery}{\ensuremath{\bm{Q}}}
+\newcommand{\attKey}{\ensuremath{\bm{K}}}
+\newcommand{\attValue}{\ensuremath{\bm{V}}}
+
+\newcommand{\alphabetSize}{\ensuremath{q}}
+
+\newcommand{\bcjrformerInput}{\ensuremath{\bm{Y}}}
+\newcommand{\bcjrformerInputIx}{\ensuremath{Y}}
+
+\newcommand{\bcjrformerInputBit}{\ensuremath{\bm{Y^{\text{symb}}}}}
+\newcommand{\bcjrformerInputBitIx}{\ensuremath{Y^{\text{symb}}}}
+
+\newcommand{\bcjrformerInputState}{\ensuremath{\bm{Y^{\text{state}}}}}
+\newcommand{\bcjrformerInputStateIx}{\ensuremath{Y^{\text{state}}}}
+
+\newcommand{\alphabet}{\ensuremath{\mathbb{F}_q}}
+
+\newcommand{\nstates}{\ensuremath{n_s}}
+
+\newcommand{\offset}{\ensuremath{\bm{o}}}
+\newcommand{\offsetIx}{\ensuremath{o}}
+
+\tikzset{fontscale/.style = {font=\relsize{#1}}
+    }
+
+
+\usetikzlibrary {arrows, calc,positioning,shapes.misc, graphs, matrix, fit, quotes, backgrounds, decorations.pathreplacing, pgfplots.groupplots}
+
+\tikzstyle{layerNode} = [draw=black, line width=.5pt, rectangle, rounded corners = 2pt, minimum height = 10pt]
+
+\tikzstyle{symbolReprNode} = [draw=black, rectangle, minimum height=12pt, minimum width=4pt, inner sep=0]
+
+\tikzstyle{stateReprNode} = [draw=black, rectangle, minimum height=12pt, minimum width=8pt, inner sep=0]
+
+\tikzstyle{outputReprNode} = [draw=black, rectangle, minimum height=4pt, minimum width=4pt, inner sep=0]
+
+% \tikzstyle{addNode} = [draw=black, circle, inner sep=0]
+
+\tikzstyle{addNode} = [
+    circle,
+    draw=black,
+    inner sep=0,
+    minimum size=7pt,
+    path picture={
+      \draw [black]
+            (path picture bounding box.90) -- (path picture bounding box.270)
+            (path picture bounding box.0) -- (path picture bounding box.180);
+    }
+]
+
+
+
+\begin{document}
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=3 by 1, horizontal sep=2cm}, 
+    % width=10cm,
+    % height=7cm,
+    xtick={300, 600, 900, 1200}, 
+    xmin=0, 
+    xmax=1200,
+    ymode=log, 
+    grid = both, 
+    grid style = {line width=.1pt}, 
+    tick align=inside, 
+    xlabel = {Epoch},
+    every axis plot post/.append style={mark=\empty, line width=.7pt},
+]
+\nextgroupplot[
+    ylabel = {BCE},
+    legend to name={CommonLegend},
+    legend style={legend columns=3},
+    legend cell align={left},
+]
+\addplot [color=blue] table [x=Epoch, y=TrainLoss, col sep=comma] {tables/convformer_train_loss_001_ps_0012.csv};
+\addlegendentry{$0.01$, Mask}
+
+\addplot [color=red] table [x=Epoch, y=TrainLoss, col sep=comma] {tables/convformer_train_loss_003_ps_0012.csv};
+\addlegendentry{$0.03$, Mask}
+
+\addplot [color=orange] table [x=Epoch, y=TrainLoss, col sep=comma] {tables/convformer_train_loss_005_ps_0012.csv};
+\addlegendentry{$0.05$, Mask}
+
+
+\addplot [dashed, color=blue] table [x=Epoch, y=TrainLoss, col sep=comma] {tables/convformer_train_loss_001_ps_0012_unmasked.csv};
+\addlegendentry{$0.01$, No Mask}
+
+\addplot [dashed, color=red] table [x=Epoch, y=TrainLoss, col sep=comma] {tables/convformer_train_loss_003_ps_0012.csv};
+\addlegendentry{$0.03$, No Mask}
+
+\addplot [dashed, color=orange] table [x=Epoch, y=TrainLoss, col sep=comma] {tables/convformer_train_loss_005_ps_0012.csv};
+\addlegendentry{$0.05$, No Mask}
+
+
+% BER INNER 
+\nextgroupplot[
+    ylabel = {BER \predyin},
+]
+\addplot [color=blue] table [x=Epoch, y=BERInner, col sep=comma] {tables/convformer_train_ber_inner_001_ps_0012.csv};
+
+\addplot [color=red] table [x=Epoch, y=BERInner, col sep=comma] {tables/convformer_train_ber_inner_003_ps_0012.csv};
+
+\addplot [color=orange] table [x=Epoch, y=BERInner, col sep=comma] {tables/convformer_train_ber_inner_005_ps_0012.csv};
+
+
+\addplot [dashed, color=blue] table [x=Epoch, y=BERInner, col sep=comma] {tables/convformer_train_ber_inner_001_ps_0012_unmasked.csv};
+
+\addplot [dashed, color=red] table [x=Epoch, y=BERInner, col sep=comma] {tables/convformer_train_ber_inner_003_ps_0012_unmasked.csv};
+
+\addplot [dashed, color=orange] table [x=Epoch, y=BERInner, col sep=comma] {tables/convformer_train_ber_inner_005_ps_0012_unmasked.csv};
+
+% BER OUTER
+\nextgroupplot[
+    ylabel = {BER \predyout},
+]
+\addplot [color=blue] table [x=Epoch, y=BEROuter, col sep=comma] {tables/convformer_train_ber_outer_001_ps_0012.csv};
+
+\addplot [color=red] table [x=Epoch, y=BEROuter, col sep=comma] {tables/convformer_train_ber_outer_003_ps_0012.csv};
+
+\addplot [color=orange] table [x=Epoch, y=BEROuter, col sep=comma] {tables/convformer_train_ber_outer_005_ps_0012.csv};
+
+
+\addplot [dashed, color=blue] table [x=Epoch, y=BEROuter, col sep=comma] {tables/convformer_train_ber_outer_001_ps_0012_unmasked.csv};
+
+\addplot [dashed, color=red] table [x=Epoch, y=BEROuter, col sep=comma] {tables/convformer_train_ber_outer_003_ps_0012_unmasked.csv};
+
+\addplot [dashed, color=orange] table [x=Epoch, y=BEROuter, col sep=comma] {tables/convformer_train_ber_outer_005_ps_0012_unmasked.csv};
+
+\end{groupplot}
+
+\path (group c2r1.north west) -- node[above]{\ref{CommonLegend}} (group c2r1.north east);
+
+\end{tikzpicture}
+\end{document}

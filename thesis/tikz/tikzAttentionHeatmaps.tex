@@ -1,0 +1,89 @@
+\documentclass[tikz=true]{standalone}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{relsize}
+\usetikzlibrary {arrows, calc,positioning,shapes.misc, graphs, matrix, fit, quotes, backgrounds}
+\usepgfplotslibrary{groupplots}
+% \definecolor{lightGreen}{rgb}{.56, .93, .56}
+% \definecolor{lightPink}{rgb}{1, .71, .76}
+% \definecolor{cornflowerBlue}{RGB}{100, 149, 237}
+% \definecolor{navajoWhite}{rgb}{1, 0.87, 0.68}
+
+% \tikzset{fontscale/.style = {font=\relsize{#1}}
+%     }
+\begin{document}
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=3 by 1}]
+\nextgroupplot[
+tick align=outside,
+tick pos=both,
+title style={at={(0.5, -0.075)},anchor=north},
+title={Layer 1},
+axis line style={draw=none} ,
+% xtick=\empty, ytick=\empty,
+xtick={6,7,14,15,22,23,30,31,38,39,46,47,54,55,62,63,70,71,78,79},
+ytick={6,7,14,15,22,23,30,31,38,39,46,47,54,55,62,63,70,71,78,79},
+xticklabel= \empty,
+yticklabel=\empty,
+% xtick style={color=black},
+y dir=reverse,
+y grid style={darkgray176},
+xmin=-0.5, xmax=83.5,
+ymin=-0.5, ymax=83.5,
+axis equal image,
+xtick style={color=black, line width=.5pt},
+ytick style={color=black, line width=.5pt}
+]
+\addplot graphics [xmin=-.5, xmax=83.5, ymin=83.5, ymax=-.5] {attention_heatmaps/heatmap-figure-000.png};
+
+\nextgroupplot[
+tick align=outside,
+tick pos=both,
+title style={at={(0.5, -0.075)},anchor=north},
+title={Layer 4},
+axis line style={draw=none} ,
+% xtick=\empty, ytick=\empty,
+xtick={6,7,14,15,22,23,30,31,38,39,46,47,54,55,62,63,70,71,78,79},
+ytick={6,7,14,15,22,23,30,31,38,39,46,47,54,55,62,63,70,71,78,79},
+xticklabel= \empty,
+yticklabel=\empty,
+% xtick style={color=black},
+y dir=reverse,
+y grid style={darkgray176},
+xmin=-0.5, xmax=83.5,
+ymin=-0.5, ymax=83.5,
+axis equal image,
+xtick style={color=black, line width=.5pt},
+ytick style={color=black, line width=.5pt}
+]
+\addplot graphics [xmin=-.5, xmax=83.5, ymin=83.5, ymax=-.5] {attention_heatmaps/heatmap-figure-003.png};
+
+\nextgroupplot[
+tick align=outside,
+tick pos=both,
+title style={at={(0.5, -0.075)},anchor=north},
+title={Layer 6},
+axis line style={draw=none} ,
+% xtick=\empty, ytick=\empty,
+xtick={6,7,14,15,22,23,30,31,38,39,46,47,54,55,62,63,70,71,78,79},
+ytick={6,7,14,15,22,23,30,31,38,39,46,47,54,55,62,63,70,71,78,79},
+xticklabel= \empty,
+yticklabel=\empty,
+% xtick style={color=black},
+y dir=reverse,
+y grid style={darkgray176},
+xmin=-0.5, xmax=83.5,
+ymin=-0.5, ymax=83.5,
+axis equal image,
+xtick style={color=black, line width=.5pt},
+ytick style={color=black, line width=.5pt}
+]
+\addplot graphics [xmin=-.5, xmax=83.5, ymin=83.5, ymax=-.5] {attention_heatmaps/heatmap-figure-005.png};
+\end{groupplot}
+
+\end{tikzpicture}
+
+\end{document}

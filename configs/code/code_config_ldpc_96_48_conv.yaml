@@ -1,0 +1,16 @@
+code_type: LDPC
+code_n: 96
+code_k: 48
+standardize: True
+inner_code_config: ConvolutionalCodeConfig
+
+MarkerCodeConfig:
+  marker: [1, 1, 0]
+  N_c: 3
+  p: 1
+
+ConvolutionalCodeConfig:
+  k: 1
+  g: [5, 7]
+  p: 1
+  random_offset: False
