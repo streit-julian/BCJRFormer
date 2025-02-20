@@ -21,8 +21,6 @@ scheduler_type: 'cosine'
 
 warmup_epochs: 100
 
-
-
 compile_model: false
 
 test_batch_size: 256

@@ -1,7 +1,3 @@
-########
-# An example configuration for a model run
-########
-
 specific_model: "BCJRFormerModel"
 
 inner_code_config: MarkerCodeConfig

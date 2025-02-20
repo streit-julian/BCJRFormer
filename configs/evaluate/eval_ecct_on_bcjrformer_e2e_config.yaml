@@ -1,23 +1,11 @@
 model_path: Results_BCJRFORMER/11022025_155134_BCJRFORMER_channel_pi_0.0_pd_0.05_ps_0.0_LDPC_n_96_k_48_CONV_k_1_g_[5, 7]_p_1/best_model.pth
 
-specific_model: "BCJRFormerModel"
+specific_model: "EcctOnBCJRFormerE2EModel"
 
 inner_code_config: MarkerCodeConfig
 
-epochs: 400
-workers: 0
-
 masked_attention: true
 gpu: 3
-dropout: 0.0
-batch_size: 256
-batch_accumulation: 1
-batches_per_epoch: 400
-
-lr: 0.00025
-scheduler_type: 'cosine'
-
-warmup_epochs: 100
 
 compile_model: false
 
@@ -26,13 +14,13 @@ test_batches_per_epoch: 1600
 
 
 seed: 42
-N_dec: 6
-d_model: 96
-h: 8
+N_dec: 1
+d_model: 16
+h: 2
 
 log_wandb: true
 
-save_checkpoints_every_n_epochs: 100
+
 IDSChannelConfig:
   p_d: 0.05
   p_s: 0.05
